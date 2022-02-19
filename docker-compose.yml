@@ -1,0 +1,24 @@
+version: "3.7"
+services:
+  database:
+    image: mysql:8.0.28
+    ports:
+      - 3307:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: Root@123
+      MYSQL_PASSWORD: Root@123
+      MYSQL_DATABASE: BLOOMBERG
+      MYSQL_USER: root
+  app:
+    image: datawarehouse
+    links:
+      - database
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://database/BLOOMBERG
+    depends_on:
+      - database
+    ports:
+      - 8081:8081
+    build:
+      context: .
+      dockerfile: Dockerfile
